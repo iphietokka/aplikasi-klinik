@@ -76,6 +76,15 @@
                 <h4 class="modal-title">Edit Data User</h4>
               </div>
               <div class="modal-body">
+                @if (count($errors) > 0)
+    <div class="alert alert-default">
+        <ul>
+            @foreach ($errors->all() as $error)
+               <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+  </div>
+@endif
                   <!-- form start -->
     <form method="POST" role="form" action="{{ url('admin/user/update', $dt->id) }}" enctype="multipart/form-data">
             @csrf
@@ -137,43 +146,36 @@
            <div class="modal fade" id="tambah-data">
           <div class="modal-dialog">
             <div class="modal-content">
-              
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Tambah Data User</h4>
               </div>
               <div class="modal-body">
-                  <!-- form start -->
-                  <form method="POST" role="form" action="{{ route('user-store') }}" enctype="multipart/form-data">
+                   @if (count($errors) > 0)
+    <div class="alert alert-default">
+        <ul>
+            @foreach ($errors->all() as $error)
+               <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+  </div>
+@endif
+
+<form method="POST" role="form" action="{{ route('user-store') }}" enctype="multipart/form-data">
             @csrf
               <div class="box-body">
                 <div class="form-group">
                   <label for="exampleInputEmail1">Name</label>
                 <input type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" placeholder="Nama" name="name" value="{{old('name')}}">
-                 @if ($errors->has('name'))
-                              <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('name') }}</strong>
-                              </span>
-                              @endif
             </div>
                  <div class="form-group">
                   <label for="exampleInputEmail1">Username</label>
                 <input type="text" class="form-control{{ $errors->has('username') ? ' is-invalid' : '' }}" placeholder="Username" name="username" value="{{old('username')}}">
-                 @if ($errors->has('username'))
-                              <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('username') }}</strong>
-                              </span>
-                              @endif
             </div>
                 <div class="form-group">
                   <label for="exampleInputPassword1">Password</label>
                   <input type="password" class="form-control{{ $errors->has('username') ? ' is-invalid' : '' }}" placeholder="Password" name="password" valu="{{old('password')}}">
-                @if ($errors->has('password'))
-                              <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('password') }}</strong>
-                              </span>
-                              @endif
                 </div>
 
                  <div class="form-group">
@@ -192,9 +194,7 @@
                   </label>
                 </div>
               </div>
-            
                 {{-- end form --}}
-
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -212,15 +212,11 @@
     <!-- /.content --> 
 @endsection
 @section('scripts')
-<?php $error = Session::get('error'); ?>
-@if (!empty($error))
-<script>
-$(function(){
-    $('#tambah-data').modal('show');
-});
+<script type="text/javascript">
+    @if (count($errors) > 0)
+        $('#tambah-data').modal('show');
+    @endif
 </script>
-    
-@endif
     <script>
     $(function() {
 
