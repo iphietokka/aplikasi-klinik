@@ -26,11 +26,11 @@
           </a>
           <ul class="treeview-menu">
             <li><a href="{{url('admin/user')}}"><i class="fa fa-circle-o"></i> Data User</a></li>
-            <li><a href="{{url('admin/user')}}"><i class="fa fa-circle-o"></i> Data Member</a></li>
+            <li><a href="{{url('admin/member')}}"><i class="fa fa-circle-o"></i> Data Member</a></li>
             <li><a href="{{url('admin/pegawai')}}"><i class="fa fa-circle-o"></i> Data Pegawai</a></li>
-             <li><a href="{{url('admin/supplier')}}"><i class="fa fa-circle-o"></i> Data Pegawai</a></li>
+             <li><a href="{{url('admin/supplier')}}"><i class="fa fa-circle-o"></i> Data Supplier</a></li>
             </ul>
-        </li>
+        </li> 
         <li class="treeview">
           <a href="#">
             <i class="fa fa-pie-chart"></i>
