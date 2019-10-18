@@ -28,7 +28,8 @@
             <li><a href="{{url('admin/user')}}"><i class="fa fa-circle-o"></i> Data User</a></li>
             <li><a href="{{url('admin/member')}}"><i class="fa fa-circle-o"></i> Data Member</a></li>
             <li><a href="{{url('admin/pegawai')}}"><i class="fa fa-circle-o"></i> Data Pegawai</a></li>
-             <li><a href="{{url('admin/supplier')}}"><i class="fa fa-circle-o"></i> Data Supplier</a></li>
+            <li><a href="{{url('admin/supplier')}}"><i class="fa fa-circle-o"></i> Data Supplier</a></li>
+            <li><a href="{{url('admin/unit')}}"><i class="fa fa-circle-o"></i> Data Unit</a></li>
             </ul>
         </li> 
         <li class="treeview">
@@ -41,8 +42,7 @@
           </a>
           <ul class="treeview-menu">
           <li><a href="{{url('admin/product')}}"><i class="fa fa-circle-o"></i> Data Product</a></li>
-            <li><a href="{{url('admin/category')}}"><i class="fa fa-circle-o"></i> Data Category</a></li>
-            <li><a href="{{url('admin/sub-category')}}"><i class="fa fa-circle-o"></i> Data Sub-Category</a></li>
+          <li><a href="{{url('admin/category')}}"><i class="fa fa-circle-o"></i> Data Kategori</a></li>
           </ul>
         </li>
         <li class="treeview">
@@ -54,8 +54,8 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="{{ url('admin/purchase') }}"><i class="fa fa-circle-o"></i> Purchase</a></li>
-            <li><a href="{{ url('admin/sales') }}"><i class="fa fa-circle-o"></i> Sales</a></li>
+            <li><a href="{{ url('admin/pembelian') }}"><i class="fa fa-circle-o"></i> Pembelian</a></li>
+            <li><a href="{{ url('admin/penjualan') }}"><i class="fa fa-circle-o"></i> Penjualan</a></li>
           </ul>
         </li>
         <li>

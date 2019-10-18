@@ -4,15 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\PegawaiRequest;
-use App\Model\Employee;
-use App\Model\Unit;
+use App\Http\Requests\SupplierRequest;
+use App\Model\Supplier;
 
-class PegawaiController extends Controller
+class SupplierController extends Controller
 {
     public function __construct()
     {
-        $this->title = "pegawai";
+        $this->title = "supplier";
     }
     /**
      * Display a listing of the resource.
@@ -22,9 +21,8 @@ class PegawaiController extends Controller
     public function index()
     {
         $title = $this->title;
-        $data = Employee::orderBy('name', 'ASC')->get();
-        $units = Unit::pluck('name', 'id');
-        return view('admin/' . $title . '.index', compact('title', 'data', 'units'));
+        $data = Supplier::orderBy('name', 'ASC')->get();
+        return view('admin.' . $title . '.index', compact('title', 'data'));
     }
 
     /**
@@ -43,18 +41,16 @@ class PegawaiController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PegawaiRequest $request)
+    public function store(SupplierRequest $request)
     {
-        $data = new Employee();
+        $data = new Supplier();
         $data->name = $request->get('name');
         $data->address = $request->get('address');
         $data->phone = $request->get('phone');
-        $data->unit_id = $request->get('unit_id');
-        $data->status = $request->get('status');
         if ($data->save()) {
-            return redirect('admin/' . $this->title)->with('success', 'Data Berhasil DiSimpan');
+            return redirect('admin/' . $this->title)->with('success', 'Data Berhasil Disimpan!!');
         } else {
-            return redirect()->back()->with('error', 'Terjadi Kesalahan, Gagal Menyimampan Data');
+            return redirect()->back()->with('error', 'Terjadi Kesalahan!!');
         }
     }
 
@@ -90,11 +86,11 @@ class PegawaiController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->all();
-        $employees = Employee::find($data['id']);
-        if ($employees->update($data)) {
-            return redirect('admin/' . $this->title)->with('success', 'Update Data Berhasil');
+        $suppliers = Supplier::find($data['id']);
+        if ($suppliers->update($data)) {
+            return redirect('admin/' . $this->title)->with('success', 'Data Berhasil Di Update!!');
         } else {
-            return redirect()->back()->with('error', 'Terjadi Kesalahan, Gagal Update Data');
+            return redirect()->back()->with('error', 'Terjadi Kesalahan!!');
         }
     }
 
@@ -106,11 +102,11 @@ class PegawaiController extends Controller
      */
     public function destroy($id)
     {
-        $data = Employee::find($id);
+        $data = Supplier::find($id);
         if ($data->delete()) {
-            return redirect('admin/' . $this->title)->with('success', 'Delete Data Berhasil');
+            return redirect('admin/' . $this->title)->with('success', 'Data Berhasil Di Hapus!!');
         } else {
-            return redirect()->back()->with('error', 'Terjadi Kesalahan, Gagal Delete Data');
+            return redirect()->back()->with('error', 'Terjadi Kesalahan!!');
         }
     }
 }

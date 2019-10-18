@@ -35,6 +35,11 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin'], function 
     Route::post('pegawai/store', 'Admin\PegawaiController@store')->name('pegawai-store');
     Route::post('pegawai/update/{id}', 'Admin\PegawaiController@update')->name('pegawai-update');
     Route::delete('pegawai/{id}', 'Admin\PegawaiController@destroy')->name('pegawai-delete');
+
+    Route::get('supplier', 'Admin\SupplierController@index')->name('supplier');
+    Route::post('supplier/store', 'Admin\SupplierController@store')->name('supplier-store');
+    Route::post('supplier/update/{id}', 'Admin\SupplierController@update')->name('supplier-update');
+    Route::delete('supplier/{id}', 'Admin\SupplierController@destroy')->name('supplier-delete');
 });
 
 //user protected routes

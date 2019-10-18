@@ -7,8 +7,8 @@
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Data Semua Pegawai</h3>
-                    <a href="#" class="btn btn-info pull-right" data-toggle="modal" data-target="#tambah-data"><i class="fa fa-plus"></i> Tambah Pegawai</a>
+                    <h3 class="box-title">Data Semua Supplier</h3>
+                    <a href="#" class="btn btn-info pull-right" data-toggle="modal" data-target="#tambah-data"><i class="fa fa-plus"></i> Tambah Supplier</a>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
@@ -19,8 +19,6 @@
                                 <th class="text-center">Nama</th>
                                 <th class="text-center">Alamat</th>
                                 <th class="text-center">Telepon</th>
-                                <th class="text-center">Unit</th>
-                                <th class="text-center">Status</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -32,12 +30,6 @@
                                 <td class="text-center">{{$dt->name}}</td>
                                 <td class="text-center">{{$dt->address}}</td>
                                 <td class="text-center">{{$dt->phone}}</td>
-                                <td class="text-center">{{$dt->units->name}}</td>
-                                <td class="text-center">
-                                    @if($dt->status == 'active')<span class="label label-info">Aktif</span>@endif
-                                    @if($dt->status == 'non-active')<span class="label label-danger">Non-Aktif</span>@endif
-                                
-                                </td>
                                 <td class="text-center">
                                     <div class="input-group margin">
                                         <div class="input-group-btn">
@@ -66,7 +58,7 @@
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <form class="form-horizontal" method="POST" action="{{ route('pegawai-delete', $dt->id) }}" enctype="multipart/form-data">
+                                            <form class="form-horizontal" method="POST" action="{{ route('supplier-delete', $dt->id) }}" enctype="multipart/form-data">
                                                 {{ csrf_field() }}
                                                 <input name="_method" type="hidden" value="DELETE">
                                                 <button type="reset" class="btn btn-primary" data-dismiss="modal">Cancel</button>
@@ -84,7 +76,7 @@
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span></button>
-                                                <h4 class="modal-title">Edit Data Pegawai</h4>
+                                                <h4 class="modal-title">Edit Data Supplier</h4>
                                             </div>
                                             <div class="modal-body">
                                                 @if (count($errors) > 0)
@@ -98,7 +90,7 @@
                                                 @endif
 
                                                 <!-- form start -->
-                                                <form method="POST" role="form" action="{{ route('pegawai-update', $dt->id) }}" enctype="multipart/form-data">
+                                                <form method="POST" role="form" action="{{ route('supplier-update', $dt->id) }}" enctype="multipart/form-data">
                                                     @csrf
                                                     <div class="box-body">
                                                         <div class="form-group">
@@ -112,28 +104,6 @@
                                                         <div class="form-group">
                                                             <label>Phone</label>
                                                             <input type="text" class="form-control" placeholder="Phone" name="phone" value="{{$dt->phone}}">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label>Unit</label>
-                                                            <select name="unit_id" id="" class="form-control">
-                                                            <option value="{{$dt->unit_id}}">{{$dt->units->name}}</option>
-                                                            @foreach ($units as $key => $value)
-                                                                <option value="{{$key}}">{{$value}}</option>
-                                                            @endforeach
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label>Status :</label>
-                                                        <div class="radio">
-                                                            <label>
-                                                                <input type="radio" name="gender" @if($dt->status == "active") checked @endif  value="active"> Aktif
-                                                            </label>
-                                                        </div>
-                                                        <div class="radio">
-                                                            <label>
-                                                                <input type="radio" name="gender" @if($dt->status == "non-active") checked @endif  value="non-active"> Non-Aktif
-                                                            </label>
-                                                        </div>
                                                         </div>
                                                     </div>
 
@@ -168,11 +138,11 @@
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title">Tambah Data Pegawai</h4>
+                                <h4 class="modal-title">Tambah Data Supplier</h4>
                             </div>
                             <div class="modal-body">
                                
-                                <form method="POST" role="form" action="{{ route('pegawai-store') }}" enctype="multipart/form-data">
+                                <form method="POST" role="form" action="{{ route('supplier-store') }}" enctype="multipart/form-data">
                                     @csrf
                                     <div class="box-body">
                                         <div class="form-group">
@@ -201,32 +171,6 @@
                                                 <strong>{{ $errors->first('phone') }}</strong>
                                             </span>
                                             @endif
-                                        </div>
-                                         <div class="form-group">
-                                            <label>Unit</label>
-                                             <select name="unit_id" id="" class="form-control">
-                                               @foreach ($units as $key => $value)
-                                               <option value="{{$key}}">{{$value}}</option>
-                                                @endforeach
-                                               </select>
-                                             @if ($errors->has('unit_id'))
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $errors->first('unit_id') }}</strong>
-                                            </span>
-                                            @endif
-                                        </div>
-                                        <div class="form=group">
-                                             <label>Status</label>
-                                            <div class="radio">
-                                            <label>
-                                                <input type="radio" name="status" value="active"> Aktif
-                                            </label>
-                                        </div>
-                                         <div class="radio">
-                                            <label>
-                                                <input type="radio" name="status" value="non-active"> Non-Aktif
-                                            </label>
-                                        </div>
                                         </div>
 
                                     </div>
