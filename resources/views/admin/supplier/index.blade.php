@@ -201,7 +201,6 @@
             $(function() {
 
                 $("#example2").DataTable();
-
             });
         </script>
         @endsection

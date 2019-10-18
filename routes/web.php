@@ -40,6 +40,13 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin'], function 
     Route::post('supplier/store', 'Admin\SupplierController@store')->name('supplier-store');
     Route::post('supplier/update/{id}', 'Admin\SupplierController@update')->name('supplier-update');
     Route::delete('supplier/{id}', 'Admin\SupplierController@destroy')->name('supplier-delete');
+
+    Route::get('product', 'Admin\ProductController@index')->name('product');
+    Route::get('product/create', 'Admin\ProductController@create')->name('product-create');
+    Route::post('product/store', 'Admin\ProductController@store')->name('product-store');
+    Route::get('product/edit/{id}', 'Admin\ProductController@edit')->name('product-edit');
+    Route::post('product/edit', 'Admin\ProductController@update')->name('product-update');
+    Route::delete('product/{id}', 'Admin\ProductController@destroy')->name('product-update');
 });
 
 //user protected routes
