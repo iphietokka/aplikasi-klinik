@@ -15,7 +15,7 @@ class Product extends Model
         'category_id',
         'details',
         'cost_price',
-        'sale_price',
+        'sales_price',
         'initial_stock',
         'total_stock',
         'unit',
@@ -27,15 +27,15 @@ class Product extends Model
         return $this->belongsTo('App\Model\Category');
     }
 
-    protected $appends = ['cost_price_format', 'sale_price_format'];
+    protected $appends = ['cost_price_format', 'sales_price_format'];
 
     public function getCostPriceFormatAttribute($value)
     {
         return 'Rp' . number_format($this->attributes['cost_price'], 2);
     }
 
-    public function getsalePriceFormatAttribute($value)
+    public function getSalesPriceFormatAttribute($value)
     {
-        return 'Rp' . number_format($this->attributes['sale_price'], 2);
+        return 'Rp' . number_format($this->attributes['sales_price'], 2);
     }
 }

@@ -29,11 +29,19 @@ class ProductRequest extends FormRequest
             'category_id' => 'required|string',
             'details' => 'string',
             'cost_price' => 'required|numeric',
-            'sale_price' => 'required|numeric',
+            'sales_price' => 'required|numeric',
             'initial_stock' => 'required|string',
-            'total_stock' => 'required|string',
-            'unit' => 'required|string',
-            'user_id' => 'required|string'
+            'unit' => 'required|string'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'Nama Tidak Boleh Kosong',
+            'code.required' => 'Kode Tidak Boleh Kosong',
+            'cost_price.required' => 'Harga Beli Tidak Boleh Kosong',
+            'sales_price.required' => 'Harga Jual Tidak Boleh Kosong',
         ];
     }
 }

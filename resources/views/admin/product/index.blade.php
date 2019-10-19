@@ -1,50 +1,135 @@
 @extends('layouts.app')
 @section('content')
-    <section class="content">
-      <div class="row">
+<section class="content">
+    <div class="row">
         <div class="col-xs-12">
-                <div class="box">
-            <div class="box-header">
-              <h3 class="box-title">Data Product</h3>
-              <a href="{{ route('product-create') }}" class="btn btn-info pull-right"><i class="fa fa-plus"></i> Tambah Product</a>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-              <table id="example2" class="table table-bordered table-striped">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Data Product</h3>
+                    <a href="{{ route('product-create') }}" class="btn btn-info pull-right"><i class="fa fa-plus"></i> Tambah Product</a>
+                </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <table id="example2" class="table table-bordered table-striped">
                 <thead>
-                <tr>
-                  <th>No.</th>
-                  <th>Nama</th>
-                  <th>Code</th>
-                  <th>Harga <small>(beli)</small></th>
-                  <th>Harga <small>(jual)</small></th>
-                </tr>
+                    <tr>
+                        <th class="text-center">No.</th>
+                        <th class="text-center">Nama</th>
+                        <th class="text-center">Code</th>
+                        <th class="text-center">Harga <small>(beli)</small></th>
+                        <th class="text-center">Harga <small>(jual)</small></th>
+                        <th class="text-center">Action</th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr>
-                  <td>Trident</td>
-                  <td>Internet</td>
-                  <td>Win 95+</td>
-                  <td> 4</td>
-                  <td>X</td>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-            <!-- /.box-body -->
-          </div>
-          <!-- /.box -->
+                    @foreach ($data as $dt)
+                    <tr>
+                        <td class="text-center">{{$loop->iteration}}</td>
+                        <td class="text-center">{{$dt->name}}</td>
+                        <td class="text-center">{{$dt->code}}</td>
+                        <td class="text-center">{{$dt->cost_price_format}}</td>
+                        <td class="text-center">{{$dt->sales_price_format}}</td>
+                        <td class="text-center">
+                            <div class="input-group margin">
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Action
+                                     <span class="fa fa-caret-down"></span></button>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                <a href="{{ route('product-edit', $dt->id) }}"> <i class="fa fa-edit"></i> Edit</a>
+                                                </li>
+                                                <li>
+                                                <a href="{{ route('product-show', $dt->id) }}"> <i class="fa fa-eye"></i> Details</a>
+                                                </li>
+                                                <li>
+                                                <a href="#" data-toggle="modal" data-target="#update_price{{$dt->id}}"> <i class="fa fa-dollar"></i> Update Price</a>
+                                                </li>
+                                                <li><a href="" data-toggle="modal" data-target="#delete_modal{{$dt->id}}"><i class="fa fa-trash"></i> Hapus</a>
+                                                </li>
+                                            </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                        {{-- Modal Delete Start --}}
+                        <div class="modal fade" tabindex="-1" role="dialog" id="delete_modal{{$dt->id}}">
+                            <div class="modal-dialog modal-sm" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-body text-center">
+                                        <div class="row">
+                                            <h4 class="modal-heading">Are You Sure?</h4>
+                                            <p>Do you really want to delete these records? This process cannot be undone.</p>
+                                        </div>
+                                    </div>
+                            <div class="modal-footer">
+                                <form class="form-horizontal" method="POST" action="{{ route('product-delete', $dt->id) }}" enctype="multipart/form-data">
+                                    {{ csrf_field() }}
+                                    <input name="_method" type="hidden" value="DELETE">
+                                    <button type="reset" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                            </div>
+                                </form>
+                                 </div><!-- /.modal-content -->
+                                </div><!-- /.modal-dialog -->
+                         </div><!-- /.modal -->
+                        {{-- Modal Delete END --}}
+
+                        {{-- Modal EDIT Start --}}
+                        <div class="modal fade" id="update_price{{$dt->id}}">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title">Update Harga Produk</h4>
+                                    </div>
+                            <div class="modal-body">
+                                <!-- form start -->
+                         <form method="POST" role="form" action="{{ route('product-update-price', $dt->id) }}" enctype="multipart/form-data">
+                                @csrf
+                                    <div class="box-body">
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Update Harga Beli</label>
+                                            <input type="text" class="form-control" placeholder="Harga Beli" name="cost_price" value="{{$dt->cost_price}}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Update Harga Jual</label>
+                                            <input type="text" class="form-control" placeholder="Harga Jual" name="sales_price" value="{{$dt->sales_price}}">
+                                        </div>
+                                    </div>
+                            {{-- end form --}}
+                            </div>
+                            <div class="modal-footer">
+                                <input type="hidden" name="product_id" value="{{$dt->id}}">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Simpan</button>
+                            </div>
+                        </form>
+                        </div>
+                        <!-- /.modal-content -->
+                        </div>
+                        <!-- /.modal-dialog -->
+                        </div>
+                        <!-- /.modal -->
+                        @endforeach
+
+                    </tbody>
+                </table>
              </div>
+        <!-- /.box-body -->
+            </div>
+        <!-- /.box -->
+            </div>
         <!-- /.col -->
-      </div>
-      <!-- /.row -->
-    </section>
+            </div>
+        <!-- /.row -->
+        </section>
 @endsection
 @section('scripts')
-     <script>
-            $(function() {
+<script>
+$(function() {
 
-                $("#example2").DataTable();
-            });
-        </script>
+$("#example2").DataTable();
+});
+</script>
 @endsection

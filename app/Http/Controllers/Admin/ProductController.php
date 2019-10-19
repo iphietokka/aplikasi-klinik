@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Model\Category;
 use App\Model\Product;
+use Auth;
 
 class ProductController extends Controller
 {
@@ -52,7 +53,7 @@ class ProductController extends Controller
         $product->category_id = $request->get('category_id');
         $product->details = $request->get('details');
         $product->cost_price = $request->get('cost_price') / 1;
-        $product->sale_price = $request->get('sale_price') / 1;
+        $product->sales_price = $request->get('sales_price') / 1;
         $product->initial_stock = $request->get('initial_stock') / 1;
         $product->total_stock = $request->get('initial_stock') / 1;
         $product->unit = $request->get('unit');
@@ -72,7 +73,9 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        //
+        $title = $this->title;
+        $products = Product::with('category')->orderBy('name', 'asc')->find($id);
+        return view('admin.' . $title . '.show', compact('data', 'products'));
     }
 
     /**
@@ -84,9 +87,9 @@ class ProductController extends Controller
     public function edit($id)
     {
         $title = $this->title;
-        $products = Product::find($id);
+        $data = Product::find($id);
         $categories = Category::pluck('name', 'id');
-        return view('admin.' . $title . '.edit', compact('title', 'products', 'categories'));
+        return view('admin.' . $title . '.edit', compact('title', 'data', 'categories'));
     }
 
     /**
@@ -100,6 +103,9 @@ class ProductController extends Controller
     {
         $model = $request->all();
         $products = Product::find($model['id']);
+        $products->total_stock = ($products->total_stock / 1) + (($request->initial_stock / 1) - ($products->initial_stock / 1));
+        $products->initial_stock = $request->initial_stock / 1;
+        $products->user_id = Auth::user()->id;
         if ($products->update($model)) {
             return redirect('admin/' . $this->title)->with('success', 'Data Product Berhasil Di Update!');
         } else {
@@ -116,5 +122,18 @@ class ProductController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function updatePrice(Request $request, $id)
+    {
+        $id = $request->get('product_id');
+        $product = Product::find($id);
+        $product->cost_price = $request->get('cost_price');
+        $product->sales_price = $request->get('sales_price');
+        if ($product->save()) {
+            return redirect('admin/' . $this->title)->with('success', 'Update Harga Berhasil!!');
+        } else {
+            return redirect('admin/' . $this->title)->with('error', 'Terjadi Kesalahan!!');
+        }
     }
 }
