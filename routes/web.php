@@ -49,6 +49,20 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin'], function 
     Route::post('product/edit', 'Admin\ProductController@update')->name('product-update');
     Route::delete('product/{id}', 'Admin\ProductController@destroy')->name('product-delete');
     Route::post('product/update-price/{id}', 'Admin\ProductController@updatePrice')->name('product-update-price');
+
+
+    Route::get('purchase', 'Admin\PurchaseController@index')->name('purchase');
+    Route::get('purchase/create', 'Admin\PurchaseController@create')->name('purchase-create');
+    Route::post('purchase/store', 'Admin\PurchaseController@store')->name('purchase-store');
+    Route::get('purchase/edit/{id}', 'Admin\PurchaseController@edit')->name('purchase-edit');
+    Route::match(array('PUT', 'PATCH'), '/purchase/{id}', 'Admin\PurchaseController@update')->name('purchase-update');
+    Route::delete('purchase/{id}', 'Admin\PurchaseController@destroy')->name('purchase-delete');
+    Route::get('purchase/details/{id}', 'Admin\PurchaseController@show')->name('purchase-show');
+    Route::post('purchase/payment/{id}', 'Admin\PurchaseController@payment')->name('purchase-payment');;
+    Route::post('purchase/received/{id}', 'Admin\PurchaseController@received')->name('purchase-received');
+    Route::get('purchase/item-search', 'Admin\PurchaseController@search')->name('purchase-search');
+    Route::get('purchase/invoice/{id}', 'Admin\PurchaseController@invoice')->name('purchase-invoice');
+    Route::get('purchase/receipt/{id}', 'PurchaseController@printReceipt')->name('purchase-receipt');
 });
 
 //user protected routes
