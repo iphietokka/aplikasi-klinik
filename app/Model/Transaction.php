@@ -33,7 +33,7 @@ class Transaction extends Model
 
     public function payments()
     {
-        return $this->hasOne('App\Payment', 'invoice_no', 'invoice_no');
+        return $this->hasOne('App\Model\Payment', 'invoice_no', 'invoice_no');
     }
 
     public function getTotalformatAttribute($value)

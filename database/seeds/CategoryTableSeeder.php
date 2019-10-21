@@ -14,8 +14,11 @@ class CategoryTableSeeder extends Seeder
     {
         Category::truncate();
 
-        Category::create(['name' => 'Obat Cair']);
-        Category::create(['name' => 'Obat Luar']);
-        Category::create(['name' => 'Obat Luka']);
+        Category::create(['name' => 'Anti Aging']);
+        Category::create(['name' => 'Cleansing']);
+        Category::create(['name' => 'Sun Protection']);
+        Category::create(['name' => 'Moisturizing']);
+        Category::create(['name' => 'Peeling']);
+        Category::create(['name' => 'Brightening']);
     }
 }

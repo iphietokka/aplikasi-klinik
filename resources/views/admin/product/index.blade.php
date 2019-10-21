@@ -6,7 +6,8 @@
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title">Data Product</h3>
-                    <a href="{{ route('product-create') }}" class="btn btn-info pull-right"><i class="fa fa-plus"></i> Tambah Product</a>
+                    <a href="{{ route('product-create') }}" class="btn btn-info pull-right margin"><i class="fa fa-plus"></i> Tambah Product</a>
+                    <a href="#" class="btn btn-info pull-right margin" data-toggle="modal" data-target="#tambah-data"><i class="fa fa-upload"></i> Import Product</a>
                 </div>
         <!-- /.box-header -->
         <div class="box-body">
@@ -44,6 +45,7 @@
                                                 <li>
                                                 <a href="#" data-toggle="modal" data-target="#update_price{{$dt->id}}"> <i class="fa fa-dollar"></i> Update Price</a>
                                                 </li>
+                                                <li> <a data-toggle="modal" data-target="#check-data{{$dt->id}}" href="#"><i class="fa fa-check"></i> Stock Correction</a></li>
                                                 <li><a href="" data-toggle="modal" data-target="#delete_modal{{$dt->id}}"><i class="fa fa-trash"></i> Hapus</a>
                                                 </li>
                                             </ul>
@@ -111,6 +113,44 @@
                         <!-- /.modal-dialog -->
                         </div>
                         <!-- /.modal -->
+
+                         {{-- Modal EDIT Start --}}
+                        <div class="modal fade" id="check-data{{$dt->id}}">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title">Koreksi Stok</h4>
+                                    </div>
+                            <div class="modal-body">
+                                <!-- form start -->
+                         <form method="POST" role="form" action="{{ route('product-stock-correction', $dt->id) }}" enctype="multipart/form-data">
+                                @csrf
+                                    <div class="box-body">
+                                        <div class="form-group">
+                                            <label>Name</label>
+                                            <input type="hidden" name="product_id" value="{{$dt->id}}">
+                                                    <input readonly type="text" name="name" value="{{$dt->name}}" class="form-control" placeholder="Nama Barang" required>
+                                        </div>
+                                         <div class="form-group">
+                                            <label>Quantity</label>
+                                             <input type="text" name="quantity" class="form-control">
+                                        </div>
+                                    </div>
+                            {{-- end form --}}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Simpan</button>
+                            </div>
+                        </form>
+                        </div>
+                        <!-- /.modal-content -->
+                        </div>
+                        <!-- /.modal-dialog -->
+                        </div>
+                        <!-- /.modal -->
                         @endforeach
 
                     </tbody>
@@ -119,6 +159,38 @@
         <!-- /.box-body -->
             </div>
         <!-- /.box -->
+              {{-- Modal EDIT Start --}}
+                        <div class="modal fade" id="tambah-data">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title">Import Product</h4>
+                                    </div>
+                            <div class="modal-body">
+                                <!-- form start -->
+                         <form method="POST" role="form" action="{{ route('product-import') }}" enctype="multipart/form-data">
+                                @csrf
+                                    <div class="box-body">
+                                        <div class="form-group">
+                                            <label>Upload File</label>
+                                             <input type="file" name="file" class="form-control" required>
+                                        </div>
+                                    </div>
+                            {{-- end form --}}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Simpan</button>
+                            </div>
+                        </form>
+                        </div>
+                        <!-- /.modal-content -->
+                        </div>
+                        <!-- /.modal-dialog -->
+                        </div>
+                        <!-- /.modal -->
             </div>
         <!-- /.col -->
             </div>

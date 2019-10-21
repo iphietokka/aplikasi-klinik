@@ -11,7 +11,7 @@ class SalesDetail extends Model
     protected $appends = ['sub_total_format', 'unit_cost_price_format'];
 
 
-    public function sell()
+    public function sales()
     {
         return $this->belongsTo('App\Model\Sales', 'sales_id');
     }

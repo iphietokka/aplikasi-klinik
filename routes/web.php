@@ -49,6 +49,8 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin'], function 
     Route::post('product/edit', 'Admin\ProductController@update')->name('product-update');
     Route::delete('product/{id}', 'Admin\ProductController@destroy')->name('product-delete');
     Route::post('product/update-price/{id}', 'Admin\ProductController@updatePrice')->name('product-update-price');
+    Route::post('product/import', 'Admin\ProductController@import')->name('product-import');
+    Route::post('product/correction/{id}', 'Admin\ProductController@stockCorrection')->name('product-stock-correction');
 
 
     Route::get('purchase', 'Admin\PurchaseController@index')->name('purchase');
@@ -62,7 +64,7 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin'], function 
     Route::post('purchase/received/{id}', 'Admin\PurchaseController@received')->name('purchase-received');
     Route::get('purchase/item-search', 'Admin\PurchaseController@search')->name('purchase-search');
     Route::get('purchase/invoice/{id}', 'Admin\PurchaseController@invoice')->name('purchase-invoice');
-    Route::get('purchase/receipt/{id}', 'PurchaseController@printReceipt')->name('purchase-receipt');
+    Route::get('purchase/receipt/{id}', 'Admin\PurchaseController@printReceipt')->name('purchase-receipt');
 });
 
 //user protected routes

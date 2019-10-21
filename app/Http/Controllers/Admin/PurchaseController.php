@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Helpers\Helper;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\PurchaseRequest;
 use Illuminate\Support\Carbon;
 use App\Model\Product;
 use App\Model\Purchase;
@@ -13,6 +12,7 @@ use App\Model\PurchaseDetail;
 use App\Model\Supplier;
 use App\Model\Transaction;
 use App\Model\Payment;
+use App\Model\Stock;
 use Auth;
 use DB;
 
@@ -49,7 +49,7 @@ class PurchaseController extends Controller
         $suppliers = Supplier::pluck('name', 'id');
         $products = Product::orderBy('name', 'asc')->get();
         $ym = Carbon::now()->format('Y/m');
-        $row = Transaction::withTrashed()->get()->count() > 0 ? Transaction::withTrashed()->get()->count() + 1 : 1;
+        $row = Purchase::withTrashed()->get()->count() > 0 ? Purchase::withTrashed()->get()->count() + 1 : 1;
         $no_invoice = $ym . '/INV-' . Helper::ref($row);
         return view('admin.' . $title . '.create', compact('title', 'suppliers', 'products', 'no_invoice'));
     }
@@ -65,7 +65,7 @@ class PurchaseController extends Controller
         $data = new Purchase();
         $data->purchase_date = date('Y-m-d', strtotime($request->purchase_date));
         $ym = Carbon::now()->format('Y/m');
-        $row = Transaction::withTrashed()->get()->count() > 0 ? Transaction::withTrashed()->get()->count() + 1 : 1;
+        $row = Purchase::withTrashed()->get()->count() > 0 ? Purchase::withTrashed()->get()->count() + 1 : 1;
         $no_invoice = $ym . '/INV-' . Helper::ref($row);
         $data->invoice_no = $no_invoice;
         $data->supplier_id = $request->supplier_id;
@@ -123,7 +123,21 @@ class PurchaseController extends Controller
      */
     public function show($id)
     {
-        //
+        $title = $this->title;
+        $data = Purchase::with('user_modify', 'supplier')->where('active', '!=', 0)->find($id);
+        if ($data->count() > 0) {
+            $detail = PurchaseDetail::with('product')->where('purchase_id', '=', $id)
+                ->orderBy('id', 'desc')
+                ->get();
+            $transaction = Transaction::with('payments')
+                ->where('purchase_id', '=', $id)
+                ->first();
+            $payments = Payment::with('transaction')
+                ->where('purchase_id', '=', $id)
+                ->orderBy('date', 'desc')
+                ->get();
+            return view('admin.' . $title . '.details', compact('title', 'data', 'detail', 'transaction', 'payments'));
+        }
     }
 
     /**
@@ -134,7 +148,18 @@ class PurchaseController extends Controller
      */
     public function edit($id)
     {
-        //
+        $title = $this->title;
+        $suppliers = Supplier::pluck('name', 'id');
+        $ym = Carbon::now()->format('Y/m');
+        $row = Purchase::withTrashed()->get()->count() > 0 ? Purchase::withTrashed()->get()->count() + 1 : 1;
+        $no_invoice = $ym . '/INV-' . Helper::ref($row);
+        $data = Purchase::with('supplier')->where('active', '!=', 0)->find($id);
+        if ($data->count() > 0) {
+            $detail = PurchaseDetail::with('product')->where('purchase_id', '=', $data->id)
+                ->orderBy('id', 'ASC')
+                ->get();
+            return view('admin.' . $title . '.edit', compact('title', 'data', 'detail', 'no_invoice', 'suppliers'));
+        }
     }
 
     /**
@@ -146,7 +171,28 @@ class PurchaseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = Purchase::find($id);
+        $data->purchase_date = date('Y-m-d', strtotime($request->purchase_date));
+        $data->invoice_no = $request->invoice_no;
+        $data->supplier_id = $request->supplier_id;
+        $data->user_id = Auth::user()->id;
+        $total = 0;
+        if ($data->save()) {
+            $delete = PurchaseDetail::where('purchase_id', '=', $id)->delete();
+            foreach ($request['product_id'] as $key => $product_id) :
+                $detail = new PurchaseDetail();
+                $detail->purchase_id = $id;
+                $detail->product_id = $product_id;
+                $detail->quantity = $request['quantity'][$key];
+                $detail->price = $request['price'][$key];
+                $total = $total + ($detail->quantity * $detail->price);
+                $detail->save();
+            endforeach;
+        }
+        $data = Purchase::find($id);
+        $data->total = $total;
+        $data->save();
+        return redirect('admin/' . $this->title)->with('success', 'Purchase Updated!');
     }
 
     /**
@@ -191,5 +237,110 @@ class PurchaseController extends Controller
         }
         echo json_encode($data);
         exit;
+    }
+
+    public function received(Request $request, $id)
+    {
+        $purchase = Purchase::find($id);
+        $data = PurchaseDetail::where('product_id', '=', $id)->orderBy('id', 'ASC')->get();
+        foreach ($data as $data) :
+            $details = new Stock();
+            $details->product_id = $data->product_id;
+            $details->quantity = $data->quantity;
+            $details->description = $purchase->invoice_no;
+            $details->type = "purchase";
+            $details->save();
+
+            $detail = Product::find($data->product_id);
+            $detail->cost_price = $data->price;
+            $detail->total_stock = $detail->total_stock + $data->quantity;
+            $detail->save();
+        endforeach;
+        $data = Purchase::find($id);
+        $data->status = "received";
+        $data->user_id = Auth::user()->id;
+        if ($data->save()) {
+            return redirect('admin/' . $this->title)->with('success', 'Ubah Status Berhasil');
+        } else {
+            return redirect('admin/' . $this->title)->with('error', 'Terjadi Kesalahan');
+        }
+    }
+
+    public function payment(Request $request, $id)
+    {
+        if ($request->get('invoice_payment') == 1) {
+            //direct invoice-wise payment starts
+            $ref_no = $request->get('invoice_no');
+            $transaction = Transaction::where('invoice_no', $ref_no)->first();
+            $previously_paid = $transaction->paid;
+            $transaction->paid = round(($previously_paid + $request->get('amount')), 2);
+            $transaction->save();
+
+            //saving paid amount into payment table
+            $payment = new Payment;
+            $payment->purchase_id = $request->get('purchase_id');
+            $payment->amount = round($request->get('amount'), 2);
+            $payment->method = $request->get('method');
+            if ($request->get('invoice_no')) {
+                $payment->invoice_no = $request->get('invoice_no');
+            }
+            $payment->payment_status = "paid";
+            $payment->note = $request->get('note');
+            $payment->date = Carbon::parse($request->get('date'))->format('Y-m-d H:i:s');
+            $payment->save();
+        } else {
+            //client-wise payment starts
+            $amount = round($request->get('amount'), 2);
+            $purchase_id = $request->get('purchase_id');
+            $purchase = Purchase::find($id);
+
+            foreach ($purchase->transactions as $transaction) {
+                $due = round(($transaction->transactions->total - $transaction->transactions->paid), 2);
+                $previously_paid = $transaction->transactions->paid;
+                if ($due >= 0 && $amount > 0) {
+                    if ($amount > $due) {
+                        $restAmount = $amount - $due;
+                        $transaction->transactions->paid = $due + $previously_paid;
+                        $transaction->save();
+                        //payment
+                        $payment = new Payment;
+                        $payment->purchase_id = $purchase_id;
+                        $payment->amount = $due;
+                        $payment->method = $request->get('method');
+                        $payment->invoice_no = $transaction->invoice_no;
+                        $payment->note = $request->get('note');
+                        $payment->payment_status = "unpaid";
+                        $payment->date = Carbon::parse($request->get('date'))->format('Y-m-d H:i:s');
+                        $payment->save();
+                    } else {
+                        $restAmount = 0;
+                        $transaction->transactions->paid = $amount + $previously_paid;
+                        $transaction->save();
+
+                        //payment
+                        $payment = new Payment;
+                        $payment->purchase_id = $purchase_id;
+                        $payment->amount = $amount;
+                        $payment->method = $request->get('method');
+                        $payment->invoice_no = $transaction->invoice_no;
+                        $payment->payment_status = "paid";
+                        $payment->note = $request->get('note');
+                        $payment->date = Carbon::parse($request->get('date'))->format('Y-m-d H:i:s');
+                        $payment->save();
+                    }
+
+                    $amount = $restAmount;
+                }
+                if ($amount <= 0) {
+                    break;
+                }
+            }
+            //client-wise payment ends
+
+        }
+
+
+        $message = trans('core.payment_received');
+        return redirect()->back()->withSuccess($message);
     }
 }

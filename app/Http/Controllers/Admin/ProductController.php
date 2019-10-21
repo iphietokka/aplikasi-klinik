@@ -5,8 +5,13 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
+use App\Imports\ProductImport;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Model\Category;
 use App\Model\Product;
+use App\Model\PurchaseDetail;
+use App\Model\SalesDetail;
+use App\Model\Stock;
 use Auth;
 
 class ProductController extends Controller
@@ -75,7 +80,9 @@ class ProductController extends Controller
     {
         $title = $this->title;
         $products = Product::with('category')->orderBy('name', 'asc')->find($id);
-        return view('admin.' . $title . '.show', compact('data', 'products'));
+        $data = PurchaseDetail::with(['purchase'])->where('product_id', $id)->orderBy('id', 'DESC')->get();
+        $datas = SalesDetail::with(['sales'])->where('product_id', $id)->orderBy('id', 'DESC')->get();
+        return view('admin.' . $title . '.show', compact('data', 'datas', 'products'));
     }
 
     /**
@@ -124,6 +131,25 @@ class ProductController extends Controller
         //
     }
 
+    public function stockCorrection(Request $request)
+    {
+        $id = $request->get('product_id');
+        $product = Product::find($id);
+        $detail = new Stock();
+        $detail->product_id = $id;
+        $detail->quantity = $request->quantity / 1;
+        $detail->description = "Stock Correction";
+        $detail->type = "correction";
+        $detail->save();
+
+        //UPDATE STOK TOTAL BARANG
+        $product = Product::find($request->product_id);
+        $product->total_stock = ($product->total_stock / 1) + ($request->quantity / 1);
+        if ($product->save()) {
+            return redirect('admin/' . $this->title)->with('success', 'Product Price Updated!');
+        }
+    }
+
     public function updatePrice(Request $request, $id)
     {
         $id = $request->get('product_id');
@@ -135,5 +161,11 @@ class ProductController extends Controller
         } else {
             return redirect('admin/' . $this->title)->with('error', 'Terjadi Kesalahan!!');
         }
+    }
+
+    public function import()
+    {
+        Excel::import(new ProductImport, request()->file('file'));
+        return redirect('admin/' . $this->title)->with('success', 'Product Berhasil Di Tambah');
     }
 }
