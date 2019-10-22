@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('pageTitle', 'Data Produk')
 @section('content')
 <section class="content">
     <div class="row">
@@ -129,13 +130,13 @@
                                 @csrf
                                     <div class="box-body">
                                         <div class="form-group">
-                                            <label>Name</label>
+                                      <label>Name</label>
                                             <input type="hidden" name="product_id" value="{{$dt->id}}">
-                                                    <input readonly type="text" name="name" value="{{$dt->name}}" class="form-control" placeholder="Nama Barang" required>
+                                             <input readonly type="text" name="name" value="{{$dt->name}}" class="form-control" placeholder="Nama Barang" required>
                                         </div>
                                          <div class="form-group">
                                             <label>Quantity</label>
-                                             <input type="text" name="quantity" class="form-control">
+                                             <input type="text" name="quantity" class="form-control" >
                                         </div>
                                     </div>
                             {{-- end form --}}

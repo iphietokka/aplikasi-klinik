@@ -28,6 +28,6 @@ class PurchaseDetail extends Model
 
     public function getPriceFormatAttribute($value)
     {
-        return 'Rp' . number_format($this->attributes['price'], 2);
+        return 'Rp' . number_format($this->attributes['price'], 2, ',', '.');
     }
 }

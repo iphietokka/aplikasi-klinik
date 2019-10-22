@@ -343,4 +343,34 @@ class PurchaseController extends Controller
         $message = trans('core.payment_received');
         return redirect()->back()->withSuccess($message);
     }
+
+    public function invoice($id)
+    {
+        $title = $this->title;
+        $date = Carbon::now()->toFormattedDateString();;
+
+        $data = Purchase::with('user_modify', 'supplier')->where('active', '!=', 0)->find($id);
+        if ($data->count() > 0) {
+            $detail = PurchaseDetail::with('product')->where('purchase_id', '=', $id)
+                ->orderBy('id', 'desc')
+                ->get();
+
+            $total_quantity = 0;
+            foreach ($detail as $sell) {
+                $total_quantity += $sell->quantity;
+            }
+
+            $transaction = Transaction::with('payments')
+                ->where('purchase_id', '=', $id)
+                ->first();
+            $payments = Payment::with('transaction')
+                ->where('purchase_id', '=', $id)
+                ->first();
+
+            // $companies = Company::orderBy('name', 'desc')
+            //     ->get();
+
+            return view('admin/' . $title . '.invoice', compact('title', 'date', 'data', 'detail', 'transaction', 'payments', 'total_quantity', 'companies'));
+        }
+    }
 }

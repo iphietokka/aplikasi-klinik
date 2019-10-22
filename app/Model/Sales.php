@@ -35,7 +35,7 @@ class Sales extends Model
 
     public function getTotalFormatAttribute($value)
     {
-        return 'Rp' . number_format($this->attributes['total'], 2);
+        return 'Rp' . number_format($this->attributes['total'], 2, ',', '.');
     }
 
     public function stockValidate($id)

@@ -27,15 +27,25 @@ class Product extends Model
         return $this->belongsTo('App\Model\Category');
     }
 
+    public function sales()
+    {
+        return $this->hasMany('App\Model\SalesDetail');
+    }
+
+    public function purchases()
+    {
+        return $this->hasMany('App\Model\PurchaseDetail');
+    }
+
     protected $appends = ['cost_price_format', 'sales_price_format'];
 
     public function getCostPriceFormatAttribute($value)
     {
-        return 'Rp' . number_format($this->attributes['cost_price'], 2);
+        return 'Rp' . number_format($this->attributes['cost_price'], 2, ',', '.');
     }
 
     public function getSalesPriceFormatAttribute($value)
     {
-        return 'Rp' . number_format($this->attributes['sales_price'], 2);
+        return 'Rp' . number_format($this->attributes['sales_price'], 2, ',', '.');
     }
 }

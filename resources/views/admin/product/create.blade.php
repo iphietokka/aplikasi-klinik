@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('pageTitle', 'Tambah Data Produk')
 @section('content')
  <!-- Main content -->
     <section class="content">

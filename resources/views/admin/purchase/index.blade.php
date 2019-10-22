@@ -43,14 +43,19 @@
                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Action
                                      <span class="fa fa-caret-down"></span></button>
                                             <ul class="dropdown-menu">
-										<li><a class="dropdown-item" href="{{ route('purchase-edit',$transaction->id) }}"><i class="fa fa-edit"></i> Edit</a>
-										</li>
+                    @if ($transaction->status == 'order')
+                    <li><a class="dropdown-item" href="{{ route('purchase-edit',$transaction->id) }}"><i class="fa fa-edit"></i> Edit</a>
+										</li>   
+                    @endif
+									
 										<li><a class="dropdown-item" href="{{route('purchase-show',$transaction->id) }}"><i class="fa fa-eye"></i> Details</a>
 										</li>
-										<li><a class="dropdown-item" href="{{url('purchase/invoice/'.$transaction->id) }}"><i class="fa fa-dollar"></i> Invoice</a>
-										</li>
+										<li><a class="dropdown-item" href="{{route('purchase-invoice',$transaction->id) }}"><i class="fa fa-dollar"></i> Invoice</a>
+                    </li>
+                     @if ($transaction->status == 'order')
 										<li><a class="dropdown-item" href="#" data-toggle="modal" data-target="#status_modal{{$transaction->id}}"><i class="fa fa-check"></i> Recieved</a>
-										</li>
+                    </li>
+                     @endif
 										<li><a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_modal{{$transaction->id}}"><i class="fa fa-trash"></i> Delete</a>
 										</li>
 										 

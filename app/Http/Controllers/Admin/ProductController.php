@@ -128,13 +128,18 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data = Product::find($id);
+        if (count($data->sales) == 0 && count($data->purchases) == 0) {
+            $data->delete();
+            return redirect()->back()->with('success', 'Data Berhasil Di Hapus');
+        } else {
+            return redirect()->back()->with('error', 'Product Tidak Dapat Di Hapus');
+        }
     }
 
     public function stockCorrection(Request $request)
     {
         $id = $request->get('product_id');
-        $product = Product::find($id);
         $detail = new Stock();
         $detail->product_id = $id;
         $detail->quantity = $request->quantity / 1;
@@ -146,7 +151,7 @@ class ProductController extends Controller
         $product = Product::find($request->product_id);
         $product->total_stock = ($product->total_stock / 1) + ($request->quantity / 1);
         if ($product->save()) {
-            return redirect('admin/' . $this->title)->with('success', 'Product Price Updated!');
+            return redirect('admin/' . $this->title)->with('success', 'Product Stock Updated!');
         }
     }
 

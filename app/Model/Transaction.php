@@ -38,16 +38,16 @@ class Transaction extends Model
 
     public function getTotalformatAttribute($value)
     {
-        return 'Rp' . number_format($this->attributes['total'], 2);
+        return 'Rp' . number_format($this->attributes['total'], 2, ',', '.');
     }
 
     public function getNetTotalformatAttribute($value)
     {
-        return 'Rp' . number_format($this->attributes['net_total'], 2);
+        return 'Rp' . number_format($this->attributes['net_total'], 2, ',', '.');
     }
 
     public function getPaidformatAttribute($value)
     {
-        return 'Rp' . number_format($this->attributes['paid'], 2);
+        return 'Rp' . number_format($this->attributes['paid'], 2, ',', '.');
     }
 }
