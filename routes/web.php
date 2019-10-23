@@ -68,6 +68,23 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin'], function 
     Route::get('purchase/item-search', 'Admin\PurchaseController@search')->name('purchase-search');
     Route::get('purchase/invoice/{id}', 'Admin\PurchaseController@invoice')->name('purchase-invoice');
     Route::get('purchase/receipt/{id}', 'Admin\PurchaseController@printReceipt')->name('purchase-receipt');
+
+
+    Route::get('sales', 'Admin\SalesController@index')->name('sales');
+    Route::get('sales/create', 'Admin\SalesController@create')->name('sales-create');
+    Route::post('sales/store', 'Admin\SalesController@store')->name('sales-store');
+    Route::get('sales/edit/{id}', 'Admin\SalesController@edit')->name('sales-edit');
+    Route::match(array('PUT', 'PATCH'), '/sales/{id}', 'Admin\SalesController@update')->name('sales-update');
+    Route::delete('sales/{id}', 'Admin\SalesController@destroy')->name('sales-delete');
+    Route::get('sales/details/{id}', 'Admin\SalesController@show')->name('sales-show');
+    Route::post('sales/received/{id}', 'Admin\SalesController@received')->name('sales-received');
+    Route::get('sales/item-search', 'Admin\SalesController@search')->name('sales-search');
+    Route::post('sales/payment/{id}', 'Admin\SalesController@payment')->name('sales-payment');
+    Route::get('sales/invoice/{id}', 'Admin\SalesController@invoice')->name('sales-invoice');
+    Route::get('sales/return/{id}', 'Admin\SalesController@return')->name('sales-return');
+    Route::post('sales/returns/{id}', 'Admin\SalesController@returns')->name('sales-returns');
+    Route::post('sales/quantity-validation', 'Admin\SalesController@quantityValidation')->name('sales-validation');
+    Route::post('sales/check-item-qty', 'Admin\SalesController@checkItemQty')->name('sales-check-item');
 });
 
 //user protected routes

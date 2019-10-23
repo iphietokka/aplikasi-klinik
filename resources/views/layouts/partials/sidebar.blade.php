@@ -55,7 +55,7 @@
           </a>
           <ul class="treeview-menu">
             <li><a href="{{ route('purchase') }}"><i class="fa fa-circle-o"></i> Pembelian</a></li>
-            <li><a href="{{ url('admin/penjualan') }}"><i class="fa fa-circle-o"></i> Penjualan</a></li>
+            <li><a href="{{ route('sales') }}"><i class="fa fa-circle-o"></i> Penjualan</a></li>
           </ul>
         </li>
         <li>

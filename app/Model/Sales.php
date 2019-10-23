@@ -13,9 +13,9 @@ class Sales extends Model
 
     protected $appends = ['total_format'];
 
-    public function sells()
+    public function sales()
     {
-        return $this->belongsTo('App\Model\SaleDetail', 'id', 'sales_id');
+        return $this->belongsTo('App\Model\SalesDetail', 'id', 'sales_id');
     }
 
     public function user_modify()
@@ -23,14 +23,14 @@ class Sales extends Model
         return $this->belongsTo('App\User', 'user_id');
     }
 
-    public function transact()
+    public function transaction()
     {
         return $this->hasMany('App\Model\Transaction', 'id', 'sales_id');
     }
 
     public function customers()
     {
-        return $this->belongsTo('App\Model\Customer', 'customer_id');
+        return $this->belongsTo('App\Model\Member', 'customer_id');
     }
 
     public function getTotalFormatAttribute($value)
