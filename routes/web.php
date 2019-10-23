@@ -36,6 +36,9 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin'], function 
     Route::post('pegawai/update/{id}', 'Admin\PegawaiController@update')->name('pegawai-update');
     Route::delete('pegawai/{id}', 'Admin\PegawaiController@destroy')->name('pegawai-delete');
 
+    Route::get('settings', 'Admin\SettingController@index')->name('settings');
+    Route::post('settings/update/{id}', 'Admin\SettingController@update')->name('settings-update');
+
     Route::get('supplier', 'Admin\SupplierController@index')->name('supplier');
     Route::post('supplier/store', 'Admin\SupplierController@store')->name('supplier-store');
     Route::post('supplier/update/{id}', 'Admin\SupplierController@update')->name('supplier-update');
@@ -51,7 +54,7 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin'], function 
     Route::post('product/update-price/{id}', 'Admin\ProductController@updatePrice')->name('product-update-price');
     Route::post('product/import', 'Admin\ProductController@import')->name('product-import');
     Route::post('product/correction/{id}', 'Admin\ProductController@stockCorrection')->name('product-stock-correction');
-
+    Route::get('product/alert', 'Admin\ProductController@alert')->name('product-alert');
 
     Route::get('purchase', 'Admin\PurchaseController@index')->name('purchase');
     Route::get('purchase/create', 'Admin\PurchaseController@create')->name('purchase-create');

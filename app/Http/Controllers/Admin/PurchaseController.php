@@ -335,13 +335,8 @@ class PurchaseController extends Controller
                     break;
                 }
             }
-            //client-wise payment ends
-
         }
-
-
-        $message = trans('core.payment_received');
-        return redirect()->back()->withSuccess($message);
+        return redirect()->back()->with('success', 'Payment Received');
     }
 
     public function invoice($id)

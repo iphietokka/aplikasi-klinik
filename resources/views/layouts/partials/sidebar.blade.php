@@ -74,5 +74,11 @@
             </span>
           </a>
         </li>
+
+        <li>
+          <a href="{{ route('settings') }}">
+            <i class="fa fa-gear"></i> <span>Settings</span>
+          </a>
+        </li>
       </ul>
     </section>

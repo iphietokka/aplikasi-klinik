@@ -11,7 +11,9 @@ use App\Model\Category;
 use App\Model\Product;
 use App\Model\PurchaseDetail;
 use App\Model\SalesDetail;
+use App\Model\Setting;
 use App\Model\Stock;
+use App\Helpers\Helper;
 use Auth;
 
 class ProductController extends Controller
@@ -172,5 +174,13 @@ class ProductController extends Controller
     {
         Excel::import(new ProductImport, request()->file('file'));
         return redirect('admin/' . $this->title)->with('success', 'Product Berhasil Di Tambah');
+    }
+
+    public function alert()
+    {
+        $title = $this->title;
+        $alertProduct = Setting::orderBy('id', 'asc')->select('alert_product')->first();
+        $products = Product::orderBy('id', 'asc')->where('total_stock', '<', $alertProduct)->get();
+        return view('admin.' . $title . '._alert', compact('products'));
     }
 }

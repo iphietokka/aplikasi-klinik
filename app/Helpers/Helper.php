@@ -6,6 +6,7 @@ use Validator;
 use Image;
 use File;
 use DB;
+use App\Model\Setting;
 use Auth;
 
 class Helper
