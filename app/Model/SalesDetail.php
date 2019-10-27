@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class SalesDetail extends Model
 {
-    protected $fillable = ['sales_id', 'product_id', 'quantity', 'sub_total', 'unit_cost_price'];
+    protected $fillable = ['sales_id', 'product_id', 'quantity', 'price', 'sub_total'];
     protected $hidden = ['created_at', 'updated_at'];
-    protected $appends = ['sub_total_format', 'unit_cost_price_format'];
+    protected $appends = ['sub_total_format', 'price_format'];
 
 
     public function sales()
@@ -26,13 +26,8 @@ class SalesDetail extends Model
         return $this->belongsTo('App\Model\Product', 'product_id');
     }
 
-    public function getSubTotalformatAttribute($value)
-    {
-        return 'Rp' . number_format($this->attributes['sub_total'], 2);
-    }
-
     public function getUnitCostPriceformatformatAttribute($value)
     {
-        return 'Rp' . number_format($this->attributes['unit_cost_price'], 2);
+        return 'Rp' . number_format($this->attributes['price'], 2);
     }
 }

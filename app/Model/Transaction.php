@@ -28,7 +28,7 @@ class Transaction extends Model
 
     public function sales_detail()
     {
-        return $this->hasMany('App\Model\SaleDetail', 'sales_id', 'sales_id');
+        return $this->hasMany('App\Model\SalesDetail', 'sales_id', 'sales_id');
     }
 
     public function payments()

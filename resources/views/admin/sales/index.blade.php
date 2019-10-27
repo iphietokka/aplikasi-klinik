@@ -33,10 +33,7 @@
 										<div class="input-group-btn">
 											<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Action
 												<span class="fa fa-caret-down"></span></button>
-												<ul class="dropdown-menu">
-													
-													<li><a class="dropdown-item" href="{{ route('sales-edit',$sale->id) }}"><i class="fa fa-edit"></i> Edit</a>
-													</li>   
+												<ul class="dropdown-menu"> 
 													<li><a class="dropdown-item" href="{{route('sales-show',$sale->id) }}"><i class="fa fa-eye"></i> Details</a>
 													</li>
 													<li><a class="dropdown-item" href="{{route('sales-invoice',$sale->id) }}"><i class="fa fa-dollar"></i> Invoice</a>

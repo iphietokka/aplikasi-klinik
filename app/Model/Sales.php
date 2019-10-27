@@ -9,7 +9,7 @@ use DB;
 class Sales extends Model
 {
     use SoftDeletes;
-    protected $fillable = ['sales_date', 'invoice_no', 'total', 'description', 'user_id', 'customer_id', 'active'];
+    protected $fillable = ['sales_date', 'invoice_no', 'total',  'user_id', 'customer_id', 'active'];
 
     protected $appends = ['total_format'];
 

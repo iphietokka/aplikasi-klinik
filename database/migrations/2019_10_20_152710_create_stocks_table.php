@@ -18,7 +18,7 @@ class CreateStocksTable extends Migration
             $table->integer('product_id');
             $table->string('description')->nullable();
             $table->integer('quantity');
-            $table->enum('type', ['purchase', 'sell', 'correction']);
+            $table->enum('type', ['purchase', 'sales', 'correction']);
             $table->timestamps();
         });
     }

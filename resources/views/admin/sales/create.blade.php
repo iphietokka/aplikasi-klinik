@@ -3,7 +3,6 @@
  <!-- Main content -->
     <section class="content">
       <div class="row">
-        <!-- left column -->
         <div class="col-md-12">
      <div class="box box-default">
             <div class="box-header with-border">
@@ -193,7 +192,7 @@ if(data.status_no == 1){
                     '<td width="30%">'+ e.value +'<input type="hidden" value=""></td><input type="hidden" name="product_id[]" value="'+e.id+'"></td>'+
                     '<td><input class="form-control text-center" type="text" value="'+e.total_stock+'"  readonly></td>'+
 
-                    '<td><input min="0"  type="text" data-id = "'+e.id+'" id="rate_id_'+e.id+'" value="'+ e.sales_price +'" name="unit_cost_price[]"  class="form-control text-center unitprice"></td>'+
+                    '<td><input min="0"  type="text" data-id = "'+e.id+'" id="rate_id_'+e.id+'" value="'+ e.sales_price +'" name="price[]"  class="form-control text-center unitprice"></td>'+
 
                     '<td><input class="form-control text-center no_units" data-id="'+e.id+'" data-rate="'+ e.sales_price +'" type="text" id="qty_'+e.id+'" name="quantity[]" value="1" data-tax ="'+e.rate+'">'+
 

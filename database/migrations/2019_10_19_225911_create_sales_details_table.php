@@ -18,9 +18,10 @@ class CreateSalesDetailsTable extends Migration
             $table->integer('sales_id');
             $table->integer('product_id');
             $table->double('quantity');
-            $table->double('unit_cost_price')->nullable();
+            $table->double('price')->nullable();
             $table->double('sub_total');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

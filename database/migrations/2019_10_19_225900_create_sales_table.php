@@ -19,7 +19,6 @@ class CreateSalesTable extends Migration
             $table->date('sales_date');
             $table->string('invoice_no');
             $table->double('total')->nullable();
-            $table->string('description')->nullable();
             $table->integer('user_id');
             $table->integer('active')->default(0);
             $table->timestamps();

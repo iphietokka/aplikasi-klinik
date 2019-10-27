@@ -74,7 +74,7 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin'], function 
     Route::get('sales/create', 'Admin\SalesController@create')->name('sales-create');
     Route::post('sales/store', 'Admin\SalesController@store')->name('sales-store');
     Route::get('sales/edit/{id}', 'Admin\SalesController@edit')->name('sales-edit');
-    Route::match(array('PUT', 'PATCH'), '/sales/{id}', 'Admin\SalesController@update')->name('sales-update');
+    // Route::match(array('PUT', 'PATCH'), '/sales/{id}', 'Admin\SalesController@update')->name('sales-update');
     Route::delete('sales/{id}', 'Admin\SalesController@destroy')->name('sales-delete');
     Route::get('sales/details/{id}', 'Admin\SalesController@show')->name('sales-show');
     Route::post('sales/received/{id}', 'Admin\SalesController@received')->name('sales-received');

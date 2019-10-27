@@ -21,6 +21,7 @@ class CreatePaymentsTable extends Migration
             $table->string('invoice_no')->nullable();
             $table->double('amount')->nullable()->default(0);
             $table->string('method');
+            $table->string('type')->nullable();
             $table->string('note')->nullable();
             $table->enum('payment_status', ['paid', 'not paid'])->nullable();
             $table->timestamps();
