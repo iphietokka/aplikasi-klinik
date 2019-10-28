@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('pageTitle', 'Member')
 @section('content')
 <!-- Main content -->
 <section class="content">

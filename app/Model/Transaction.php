@@ -36,6 +36,11 @@ class Transaction extends Model
         return $this->hasOne('App\Model\Payment', 'invoice_no', 'invoice_no');
     }
 
+    public function returnSales()
+    {
+        return $this->hasMany('App\Model\ReturnTransaction', 'invoice_no', 'invoice_no');
+    }
+
     public function getTotalformatAttribute($value)
     {
         return 'Rp' . number_format($this->attributes['total'], 2, ',', '.');

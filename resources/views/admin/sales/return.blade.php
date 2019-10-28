@@ -29,7 +29,7 @@
                 </tr>
                 </thead>
                 <tbody>
-            <form method="POST" action="{{route('sales-return', $data->id)}}" enctype="multipart/form-data">
+            <form method="POST" action="{{route('sales-returns', $data->id)}}" enctype="multipart/form-data">
 			@csrf
              @foreach($detail as $sales)
                 <tr>

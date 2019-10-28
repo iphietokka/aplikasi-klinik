@@ -34,6 +34,6 @@ class Payment extends Model
 
     public function getAmountFormatAttribute($value)
     {
-        return 'Rp' . number_format($this->attributes['amount'], 2, ',', '.');
+        return 'Rp.' . number_format($this->attributes['amount'], 2, ',', '.');
     }
 }

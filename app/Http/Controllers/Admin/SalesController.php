@@ -15,6 +15,7 @@ use App\Model\Stock;
 use App\Model\Transaction;
 use App\Model\Payment;
 use App\Model\Setting;
+use App\Model\ReturnTransaction;
 
 class SalesController extends Controller
 {
@@ -179,10 +180,8 @@ class SalesController extends Controller
 
     public function payment(Request $request, $id)
     {
-
         if ($request->get('invoice_payment') == 1) {
             //direct invoice-wise payment starts
-
             $ref_no = $request->get('invoice_no');
             $transaction = Transaction::where('invoice_no', $ref_no)->first();
             $previously_paid = $transaction->paid;
@@ -254,7 +253,7 @@ class SalesController extends Controller
             }
             //payment ends
         }
-        return redirect($this->title)->with('success', 'Payment Success!');
+        return redirect('admin./' . $this->title)->with('success', 'Payment Success!');
     }
 
     public function invoice($id)
@@ -312,7 +311,7 @@ class SalesController extends Controller
 
     public function returns(Request $request, $id)
     {
-        $data = Sell::with('user_modify', 'customers')->where('active', '!=', 0)->find($id);
+        $data = Sales::with('user_modify', 'customers')->where('active', '!=', 0)->find($id);
         if ($data->count() > 0) {
             $detail = SalesDetail::with('product')->where('sales_id', '=', $id)
                 ->orderBy('id', 'desc')
@@ -322,12 +321,12 @@ class SalesController extends Controller
                 ->where('sales_id', '=', $id)
                 ->first();
 
-            $payments = PaymentSell::with('transaction')
-                ->where('sales_id', '=', $id)
-                ->orderBy('date', 'desc')
-                ->get();
+            // $payments = Payment::with('transaction')
+            //     ->where('sales_id', '=', $id)
+            //     ->orderBy('date', 'desc')
+            //     ->get();
 
-            $previousTotal = $transaction->total;
+            // $previousTotal = $transaction->total;
 
             $total = 0;
             $updatedCostPrice = 0;
@@ -335,7 +334,6 @@ class SalesController extends Controller
 
 
             foreach ($detail as $sell) {
-
                 $returnQuantity = $request->get('quantity_' . $sell->id) ?: 0;
                 $total_return_quantity += $returnQuantity;
                 if ($returnQuantity === 0) {
@@ -344,9 +342,9 @@ class SalesController extends Controller
                 }
                 $returnUnitPrice = floatval($request->get('unit_price_' . $sell->id));
 
-                $sellId = $request->get('sell_' . $sell->id);
+                $sellId = $request->get('sales_' . $sell->id);
 
-                $sell = SellDetail::find($sellId);
+                $sell = SalesDetail::find($sellId);
 
                 if ($returnQuantity > $sell->quantity) {
                     $warning = "Return Quantity (" . $returnQuantity . ") Can't be greater than the Selling Quantity (" . $sell->quantity . ")";
@@ -395,6 +393,7 @@ class SalesController extends Controller
                 $payment->amount =  $diff;
                 $payment->method = 'cash';
                 $payment->type = "return";
+                $payment->payment_status = "return";
                 $payment->invoice_no = $transaction->invoice_no;
                 $payment->note = "Return for " . $transaction->invoice_no;
                 $payment->date = Carbon::now()->format('Y-m-d H:i:s');

@@ -193,7 +193,7 @@ if(data.status_no == 1){
                     '<td><input class="form-control text-center" type="text" value="'+e.total_stock+'"  readonly></td>'+
 
                     '<td><input min="0"  type="text" data-id = "'+e.id+'" id="rate_id_'+e.id+'" value="'+ e.sales_price +'" name="price[]"  class="form-control text-center unitprice"></td>'+
-
+                      
                     '<td><input class="form-control text-center no_units" data-id="'+e.id+'" data-rate="'+ e.sales_price +'" type="text" id="qty_'+e.id+'" name="quantity[]" value="1" data-tax ="'+e.rate+'">'+
 
                     '<td><input class="form-control text-center amount" type="text" id="amount_'+e.id+'" value="'+e.sales_price+'"  readonly name="sub_total[]"></td>'+

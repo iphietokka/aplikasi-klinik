@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('pageTitle', 'Pegawai')
 @section('content')
 <!-- Main content -->
 <section class="content">
