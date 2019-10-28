@@ -191,7 +191,7 @@ class SalesController extends Controller
 
             //saving paid amount into payment table
             $payment = new Payment;
-            $payment->sell_id = $request->get('sales_id');
+            $payment->sales_id = $request->get('sales_id');
             $payment->amount = round($request->get('amount'), 2);
             $payment->method = $request->get('method');
             $payment->type = $request->get('type');
@@ -207,7 +207,7 @@ class SalesController extends Controller
             //customer-wise payment starts
             $amount = round($request->get('amount'), 2);
             $sell_id = $request->get('sales_id');
-            $purchase = Sell::find($id);
+            $purchase = Sales::find($id);
 
             foreach ($purchase->transaction as $transaction) {
                 $due = round(($transaction->transaction->total - $transaction->transaction->paid), 2);
@@ -291,22 +291,22 @@ class SalesController extends Controller
     public function return($id)
     {
         $title = $this->title;
-        $data = Sell::with('user_modify', 'customers')->where('active', '!=', 0)->find($id);
+        $data = Sales::with('user_modify', 'customers')->where('active', '!=', 0)->find($id);
         if ($data->count() > 0) {
-            $detail = SellDetail::with('product')->where('sell_id', '=', $id)
+            $detail = SalesDetail::with('product')->where('sales_id', '=', $id)
                 ->orderBy('id', 'desc')
                 ->get();
 
             $transaction = Transaction::with('payments')
-                ->where('sell_id', '=', $id)
+                ->where('sales_id', '=', $id)
                 ->first();
 
-            $payments = PaymentSell::with('transaction')
-                ->where('sell_id', '=', $id)
+            $payments = Payment::with('transaction')
+                ->where('sales_id', '=', $id)
                 ->orderBy('date', 'desc')
                 ->get();
 
-            return view($title . '.return.return', compact('title', 'data', 'detail', 'transaction', 'payments'));
+            return view('admin.' . $title . '.return', compact('title', 'data', 'detail', 'transaction', 'payments'));
         }
     }
 
@@ -314,16 +314,16 @@ class SalesController extends Controller
     {
         $data = Sell::with('user_modify', 'customers')->where('active', '!=', 0)->find($id);
         if ($data->count() > 0) {
-            $detail = SellDetail::with('product')->where('sell_id', '=', $id)
+            $detail = SalesDetail::with('product')->where('sales_id', '=', $id)
                 ->orderBy('id', 'desc')
                 ->get();
 
             $transaction = Transaction::with('payments')
-                ->where('sell_id', '=', $id)
+                ->where('sales_id', '=', $id)
                 ->first();
 
             $payments = PaymentSell::with('transaction')
-                ->where('sell_id', '=', $id)
+                ->where('sales_id', '=', $id)
                 ->orderBy('date', 'desc')
                 ->get();
 
@@ -372,14 +372,14 @@ class SalesController extends Controller
 
                 // Save Return statement
                 $return = new ReturnTransaction;
-                $return->sells_id = $sell->id;
+                $return->sales_id = $sell->id;
                 $return->invoice_no = $data->invoice_no;
                 $return->return_units = $returnQuantity;
                 $return->return_amount = ($returnQuantity * $returnUnitPrice);
                 $return->returned_by = \Auth::user()->id;
                 $return->save();
 
-                $transaction = Transaction::find($sell->sell_id);
+                $transaction = Transaction::find($sell->sales_id);
                 $transaction->total = $total;
                 $transaction->net_total = $total;
                 $transaction->total_cost_price = $transaction->total_cost_price - $updatedCostPrice;
@@ -390,8 +390,8 @@ class SalesController extends Controller
 
                 //if difference is greater than due amount then we need to return some money to the customer
 
-                $payment = new PaymentSell;
-                $payment->sell_id =  $sellId;
+                $payment = new Payment;
+                $payment->sales_id =  $sellId;
                 $payment->amount =  $diff;
                 $payment->method = 'cash';
                 $payment->type = "return";
