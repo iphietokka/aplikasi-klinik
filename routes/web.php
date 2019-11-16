@@ -85,6 +85,11 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin'], function 
     Route::post('sales/returns/{id}', 'Admin\SalesController@returns')->name('sales-returns');
     Route::post('sales/quantity-validation', 'Admin\SalesController@quantityValidation')->name('sales-validation');
     Route::post('sales/check-item-qty', 'Admin\SalesController@checkItemQty')->name('sales-check-item');
+
+    Route::get('unit', 'Admin\UnitController@index')->name('unit');
+    Route::post('unit/store', 'Admin\UnitController@store')->name('unit-store');
+    Route::post('unit/udpate/{id}', 'Admin\UnitController@update')->name('unit-update');
+    Route::delete('unit/{id}', 'Admin\UnitController@destroy')->name('unit-delete');
 });
 
 //user protected routes

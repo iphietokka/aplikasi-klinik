@@ -259,6 +259,7 @@ class SalesController extends Controller
     public function invoice($id)
     {
         $title = $this->title;
+        $date = Carbon::now()->toFormattedDateString();
         $data = Sales::with('user_modify', 'customers')->where('active', '!=', 0)->find($id);
         if ($data->count() > 0) {
             $detail = SalesDetail::with('product')->where('sales_id', '=', $id)
@@ -283,7 +284,7 @@ class SalesController extends Controller
             $companies = Setting::orderBy('company_name', 'desc')
                 ->get();
 
-            return view('admin.' . $title . '.invoice', compact('title', 'data', 'detail', 'transaction', 'payments', 'total_quantity', 'companies', 'due'));
+            return view('admin.' . $title . '.invoice', compact('title', 'data', 'detail', 'transaction', 'payments', 'total_quantity', 'companies', 'due', 'date'));
         }
     }
 
@@ -393,7 +394,6 @@ class SalesController extends Controller
                 $payment->amount =  $diff;
                 $payment->method = 'cash';
                 $payment->type = "return";
-                $payment->payment_status = "return";
                 $payment->invoice_no = $transaction->invoice_no;
                 $payment->note = "Return for " . $transaction->invoice_no;
                 $payment->date = Carbon::now()->format('Y-m-d H:i:s');

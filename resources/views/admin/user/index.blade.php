@@ -48,7 +48,7 @@
                               <div class="modal-content">
                                 <div class="modal-body text-center">
                                   <div class="row">
-                                  
+
                                  <h4 class="modal-heading">Are You Sure?</h4>
                                     <p>Do you really want to delete these records? This process cannot be undone.</p>
                                           </div>
@@ -69,7 +69,7 @@
            <div class="modal fade" id="edit_modal{{$dt->id}}">
           <div class="modal-dialog">
             <div class="modal-content">
-              
+
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span></button>
@@ -117,7 +117,7 @@
                   </label>
                 </div>
               </div>
-            
+
                 {{-- end form --}}
 
               </div>
@@ -209,7 +209,7 @@
       </div>
       <!-- /.row -->
     </section>
-    <!-- /.content --> 
+    <!-- /.content -->
 @endsection
 @section('scripts')
 <script type="text/javascript">
@@ -221,7 +221,7 @@
     $(function() {
 
   $("#example2").DataTable();
-       
+
 });
 </script>
 @endsection

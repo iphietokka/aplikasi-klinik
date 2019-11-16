@@ -90,7 +90,7 @@
                     <td class="text-center">{{$loop->iteration}}</td>
                     <td class="text-center">{{ $product->purchase->purchase_date }}</td>
                     <td class="text-center">{{ $product->purchase->invoice_no }}</td>
-                    <td class="text-center">{{ $product->purchase->total }}</td>
+                    <td class="text-center">{{ $product->purchase->total_format }}</td>
                     <td class="text-center">{{ $product->quantity }}</td>
                     <td class="text-center">{{ $product->purchase->supplier->name }}</td>
                     </tr>

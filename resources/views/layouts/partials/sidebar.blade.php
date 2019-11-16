@@ -66,13 +66,18 @@
           </a>
           
         </li>
-        <li>
+        <li class="treeview">
           <a href="#">
             <i class="fa fa-table"></i> <span>Laporan</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
+          <ul class="treeview-menu">
+            <li><a href=""> <i class="fa fa-circle-o"></i> Laporan Pembelian </a></li>
+            <li><a href=""> <i class="fa fa-circle-o"></i> Laporan Penjualan </a></li>
+            <li><a href=""> <i class="fa fa-circle-o"></i> Laporan Perawatan </a></li>
+          </ul>
         </li>
 
         <li>

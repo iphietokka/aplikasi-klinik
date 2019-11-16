@@ -26,10 +26,10 @@
                         <tbody>
                             @foreach($detail as $product)
                             <tr>
-                                <td class="text-center">{{$product->product->name}}</td>
-                                <td class="text-center">{{ $product->quantity}}</td>
-                                <td class="text-center">{{ $product->price }}</td>
-                                <td class="text-center">Rp{{number_format($product->sub_total)}}</td>
+                                <td class="text-center">{{ $product->product->name }}</td>
+                                <td class="text-center">{{ $product->quantity }}</td>
+                                <td class="text-center">{{ $product->price_format }}</td>
+                                <td class="text-center">{{ $product->sub_total_format }}</td>
                             </tr>
                             @endforeach
                             <tr>
@@ -44,7 +44,7 @@
                                         Total :
                                     </b>
                                 </td>
-                                <td class="text-center">Rp{{$transaction->total}}</td>
+                                <td class="text-center">{{$transaction->total_format}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -56,14 +56,13 @@
         <!-- /.col -->
     </div>
 </section>
-
+  @if($transaction->return == 1)
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
-                  @if($transaction->return == 1)
-              
+                
                 This sales has return item 
                 @if($transaction->returnSales->count() != 0)
                 <h5 style="text-align: left;">
@@ -92,8 +91,8 @@
                         <td class="text-center">{{$loop->iteration}}</td>
                         <td class="text-center">{{$return->sales->product->name}}</td>
                         <td class="text-center">{{$return->return_units}}</td>
-                        <td class="text-center">{{$return->sales->sub_total }}</td> 
-                        <td class="text-center">{{$return->return_amount}}</td>
+                        <td class="text-center">{{$return->sales->sub_total_format }}</td> 
+                        <td class="text-center">{{$return->return_amount_format}}</td>
                     </tr>
                     @endforeach
                         </tbody>
@@ -101,7 +100,7 @@
                 </div>
                      @endif
     </div>
-    @endif
+  
                 <!-- /.box-body -->
             </div>
             <!-- /.box -->
@@ -109,7 +108,7 @@
         <!-- /.col -->
    
 </section>
-
+  @endif
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
@@ -122,11 +121,11 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_1">
-                        <li> <strong>Net Total : Rp.{{number_format($transaction->net_total)}}</strong></li>
+                        <li> <strong>Net Total : {{$transaction->net_total_format}}</strong></li>
                         <li><strong>Total Paid : 
-                            Rp.{{number_format($transaction->paid)}}</strong>
+                            {{$transaction->paid_format}}</strong>
                             @if($transaction->return == 1)
-                            <small>(This sales has return item)</small>
+                            <small>( This sales has return item )</small>
                             @endif
                         </strong></li>
                         @if($transaction->return == 1 || ($transaction->net_total - $transaction->paid) > 0 )
@@ -176,7 +175,7 @@
                                             <b>Total :</b>
                                         </td>
                                         <td colspan="1"  class="text-center bold">
-                                            Rp.{{number_format($payments->sum('amount'), 2, ',', '.')}}
+                                            Rp{{number_format($payments->sum('amount'), 0, ',', '.')}}
                                         </td>
                                     </tr>
                                 </tbody>

@@ -41,18 +41,18 @@ class Transaction extends Model
         return $this->hasMany('App\Model\ReturnTransaction', 'invoice_no', 'invoice_no');
     }
 
-    public function getTotalformatAttribute($value)
+    public function getTotalFormatAttribute($value)
     {
-        return 'Rp' . number_format($this->attributes['total'], 2, ',', '.');
+        return 'Rp' . number_format($this->attributes['total'], 0, ',', '.');
     }
 
-    public function getNetTotalformatAttribute($value)
+    public function getNetTotalFormatAttribute($value)
     {
-        return 'Rp' . number_format($this->attributes['net_total'], 2, ',', '.');
+        return 'Rp' . number_format($this->attributes['net_total'], 0, ',', '.');
     }
 
-    public function getPaidformatAttribute($value)
+    public function getPaidFormatAttribute($value)
     {
-        return 'Rp' . number_format($this->attributes['paid'], 2, ',', '.');
+        return 'Rp' . number_format($this->attributes['paid'], 0, ',', '.');
     }
 }

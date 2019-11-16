@@ -342,7 +342,7 @@ class PurchaseController extends Controller
     public function invoice($id)
     {
         $title = $this->title;
-        $date = Carbon::now()->toFormattedDateString();;
+        $date = Carbon::now()->toFormattedDateString();
 
         $data = Purchase::with('user_modify', 'supplier')->where('active', '!=', 0)->find($id);
         if ($data->count() > 0) {

@@ -21,7 +21,6 @@ class SettingController extends Controller
     {
         $title = $this->title;
         $data = Setting::orderBy('id', 'desc')->get();
-
         return view('admin.' . $title . '.index', compact('title', 'data'));
     }
 
